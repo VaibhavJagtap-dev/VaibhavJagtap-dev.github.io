@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
+import { downloadResume } from "../utils/resume.js";
 
 interface ResumeModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => {
+export const ResumeModal: React.FC<ResumeModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
   const [zoomScale, setZoomScale] = useState(1.0);
   const [copiedEmail, setCopiedEmail] = useState(false);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -13,22 +17,22 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return;
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         onClose();
-      } else if (e.key === '+' || e.key === '=') {
+      } else if (e.key === "+" || e.key === "=") {
         setZoomScale((prev) => Math.min(1.6, prev + 0.15));
-      } else if (e.key === '-') {
+      } else if (e.key === "-") {
         setZoomScale((prev) => Math.max(0.6, prev - 0.15));
       }
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText('vaibhav.jagtap.dev@outlook.com');
+    navigator.clipboard.writeText("vaibhav.jagtap.dev@outlook.com");
     setCopiedEmail(true);
     setTimeout(() => setCopiedEmail(false), 2000);
   };
@@ -36,52 +40,7 @@ export const ResumeModal: React.FC<ResumeModalProps> = ({ isOpen, onClose }) => 
   const handleDownload = () => {
     setIsDownloading(true);
     setTimeout(() => {
-      const resumeContent = `VAIBHAV JAGTAP - Full Stack Developer / Software Engineer
-Email: vaibhav.jagtap.dev@outlook.com | Phone: +91 9699666915 | Location: Mumbai, Maharashtra, India
-GitHub: https://github.com/VaibhavJagtap-dev | LinkedIn: https://linkedin.com/in/vaibhav-jagtap-648a02244/
-
-EXECUTIVE SUMMARY:
-Full Stack Developer with 2 years, 7 months of experience architecting scalable web and mobile applications using React, Angular, Next.js, Node.js, and Django. Proven track record boosting organic SEO scores from 35 to 90+, architecting SSR engines, and publishing production hybrid mobile apps across Apple App Store and Google Play Store.
-
-EXPERIENCE:
-1. Software Engineer / Full Stack Developer — Unlok (02/2026 - Present / 04/2024 - Present)
-   - Revised the Symbol Search user interface by converting legacy design into a responsive, user-friendly layout, enhancing usability by 30%.
-   - Engineered an interactive Quadrant UI utilizing Recharts for enhanced data visualization.
-   - Constructed the Unlok Insight feature from start to finish, incorporating RESTful CRUD APIs and a complete frontend implementation with React and Tailwind CSS.
-   - Introduced dynamic story slides for news content, designed to improve user engagement.
-
-2. Full Stack Developer — Systemstar Infotech India Pvt. Ltd. (03/2025 - 01/2026)
-   - Developed dedicated subdomain ordering sites, client price-tier config portals, and integrated NMI, Authorize.net & PayPal gateways.
-   - Led comprehensive UI/UX website redesign and published Heatfleet hybrid mobile app to Google Play Store & Apple App Store using Capacitor.js.
-   - Built Flyku sports club management platform using Next.js (web), React Native (iOS & Android), TypeScript, and Tailwind CSS.
-   - Introduced referral systems, live news feeds, and responsive multi-platform features with ongoing maintenance.
-
-3. Junior Software Engineer — Instient Pvt. Ltd. (09/2023 - 02/2025)
-   - Implemented Server-Side Rendering (SSR) to dramatically boost page load performance and Core Web Vitals.
-   - Increased site-wide SEO scores from 35 to over 90 via Google Search Console and Screaming Frog auditing.
-   - Upgraded legacy Angular + Ionic mobile app to Angular 17+ with Capacitor.js for improved maintainability.
-
-EDUCATION:
-B.S. in Information Technology — University of Mumbai (2018 - 2021)
-Graduated with First Class Honors. Core coursework: DBMS, Operating Systems, Web Technologies, Software Engineering, Computer Networks.
-
-TECHNICAL SKILLS:
-- Languages: JavaScript (ES6+), TypeScript, Python, HTML5, CSS3
-- Frontend: React, Angular 17+, Next.js, Redux, Tailwind CSS, Recharts
-- Backend: Node.js, Express.js, Django, RESTful CRUD APIs, JWT Authentication
-- Databases: MongoDB, PostgreSQL, MySQL, Redis Caching
-- Mobile: React Native, Capacitor.js, iOS & Android Store Deployment
-- Tools: Git, GitHub, Docker, Postman, Screaming Frog, Google Search Console, Nx Monorepo
-`;
-      const blob = new Blob([resumeContent], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'Vaibhav_Jagtap_Resume.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      downloadResume();
       setIsDownloading(false);
     }, 400);
   };
@@ -101,7 +60,9 @@ TECHNICAL SKILLS:
         <div className="flex flex-wrap items-center justify-between gap-space-sm px-space-md py-space-sm bg-surface-container border-b border-outline-variant/30 flex-shrink-0">
           <div className="flex items-center gap-space-sm min-w-0">
             <div className="p-1.5 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
-              <span className="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+              <span className="material-symbols-outlined text-[20px]">
+                picture_as_pdf
+              </span>
             </div>
             <div className="flex flex-col min-w-0">
               <div className="flex items-center gap-2">
@@ -113,7 +74,9 @@ TECHNICAL SKILLS:
                 </span>
               </div>
               <div className="flex items-center gap-2 text-[11px] font-label-mono text-outline-variant">
-                <span className="text-primary font-medium">● Verified Candidate</span>
+                <span className="text-primary font-medium">
+                  ● Verified Candidate
+                </span>
                 <span>•</span>
                 <span>2 Yrs 7 Mo Exp</span>
                 <span>•</span>
@@ -130,7 +93,9 @@ TECHNICAL SKILLS:
               title="Zoom Out (-)"
               type="button"
             >
-              <span className="material-symbols-outlined text-[16px]">remove</span>
+              <span className="material-symbols-outlined text-[16px]">
+                remove
+              </span>
             </button>
             <span className="px-1.5 text-on-surface text-[11px] min-w-[42px] text-center font-semibold">
               {Math.round(zoomScale * 100)}%
@@ -151,7 +116,9 @@ TECHNICAL SKILLS:
               Reset
             </button>
             <div className="h-3 w-px bg-outline-variant/40 mx-0.5"></div>
-            <span className="text-on-surface-variant text-[11px] px-1">Page 1 of 1</span>
+            <span className="text-on-surface-variant text-[11px] px-1">
+              Page 1 of 1
+            </span>
           </div>
 
           {/* Right Action Set */}
@@ -162,11 +129,13 @@ TECHNICAL SKILLS:
               type="button"
               disabled={isDownloading}
             >
-              <span className={`material-symbols-outlined text-[16px] ${isDownloading ? 'animate-spin' : ''}`}>
-                {isDownloading ? 'sync' : 'download'}
+              <span
+                className={`material-symbols-outlined text-[16px] ${isDownloading ? "animate-spin" : ""}`}
+              >
+                {isDownloading ? "sync" : "download"}
               </span>
               <span className="hidden sm:inline">
-                {isDownloading ? 'Preparing...' : 'Download PDF'}
+                {isDownloading ? "Preparing..." : "Download PDF"}
               </span>
             </button>
 
@@ -176,7 +145,9 @@ TECHNICAL SKILLS:
               title="Print Resume"
               type="button"
             >
-              <span className="material-symbols-outlined text-[18px]">print</span>
+              <span className="material-symbols-outlined text-[18px]">
+                print
+              </span>
             </button>
 
             <button
@@ -185,7 +156,9 @@ TECHNICAL SKILLS:
               title="Close (Esc)"
               type="button"
             >
-              <span className="material-symbols-outlined text-[20px]">close</span>
+              <span className="material-symbols-outlined text-[20px]">
+                close
+              </span>
             </button>
           </div>
         </div>
@@ -209,15 +182,21 @@ TECHNICAL SKILLS:
                 </div>
                 <div className="flex flex-wrap md:flex-col md:items-end gap-x-3 gap-y-1 text-xs text-slate-600">
                   <span className="flex items-center gap-1 font-mono text-[12px]">
-                    <span className="material-symbols-outlined text-[13px] text-emerald-600">mail</span>
+                    <span className="material-symbols-outlined text-[13px] text-emerald-600">
+                      mail
+                    </span>
                     vaibhav.jagtap.dev@outlook.com
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[13px] text-sky-600">call</span>
+                    <span className="material-symbols-outlined text-[13px] text-sky-600">
+                      call
+                    </span>
                     +91 9699666915
                   </span>
                   <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[13px] text-slate-500">location_on</span>
+                    <span className="material-symbols-outlined text-[13px] text-slate-500">
+                      location_on
+                    </span>
                     Mumbai, Maharashtra, India
                   </span>
                   <div className="flex items-center gap-2 pt-1 font-mono text-[11px]">
@@ -246,11 +225,19 @@ TECHNICAL SKILLS:
             {/* Summary Section */}
             <section className="mb-5">
               <h2 className="text-xs uppercase font-bold tracking-wider text-slate-900 border-b border-slate-200 pb-1 mb-2 flex items-center gap-1.5 font-label-mono">
-                <span className="material-symbols-outlined text-[14px] text-emerald-700">person</span>
+                <span className="material-symbols-outlined text-[14px] text-emerald-700">
+                  person
+                </span>
                 Executive Summary
               </h2>
               <p className="text-[12.5px] leading-relaxed text-slate-700">
-                Full Stack Developer with 2 years, 7 months of experience building scalable web and mobile applications using React, Angular, Next.js, Node.js, and Django. Proven track record in improving SEO performance (35 to 90+), implementing SSR, and delivering end-to-end features across frontend and backend. Experienced in cross-platform mobile development (React Native, Capacitor) and collaborating effectively in agile environments.
+                Full Stack Developer with 2 years, 7 months of experience
+                building scalable web and mobile applications using React,
+                Angular, Next.js, Node.js, and Django. Proven track record in
+                improving SEO performance (35 to 90+), implementing SSR, and
+                delivering end-to-end features across frontend and backend.
+                Experienced in cross-platform mobile development (React Native,
+                Capacitor) and collaborating effectively in agile environments.
               </p>
             </section>
 
@@ -260,51 +247,104 @@ TECHNICAL SKILLS:
               <div className="md:col-span-7 flex flex-col gap-4">
                 <section>
                   <h2 className="text-xs uppercase font-bold tracking-wider text-slate-900 border-b border-slate-200 pb-1 mb-3 flex items-center gap-1.5 font-label-mono">
-                    <span className="material-symbols-outlined text-[14px] text-emerald-700">work</span>
+                    <span className="material-symbols-outlined text-[14px] text-emerald-700">
+                      work
+                    </span>
                     Work Experience
                   </h2>
                   <div className="space-y-4">
                     {/* Job 1 */}
                     <div className="border-l-2 border-emerald-600 pl-3">
                       <div className="flex flex-wrap items-baseline justify-between gap-1">
-                        <h3 className="text-[13px] font-bold text-slate-900">Software Engineer</h3>
-                        <span className="text-[11px] font-mono text-slate-500">02/2026 — 03/2026</span>
+                        <h3 className="text-[13px] font-bold text-slate-900">
+                          Software Engineer
+                        </h3>
+                        <span className="text-[11px] font-mono text-slate-500">
+                          02/2026 — 03/2026
+                        </span>
                       </div>
-                      <div className="text-[12px] font-medium text-emerald-800">Unlok • New York / Remote</div>
+                      <div className="text-[12px] font-medium text-emerald-800">
+                        Unlok • New York / Remote
+                      </div>
                       <ul className="mt-1.5 space-y-1 text-[12px] text-slate-700 list-disc list-inside leading-snug">
-                        <li>Revised Symbol Search user interface, boosting usability by 30%.</li>
-                        <li>Engineered interactive Quadrant UI using Recharts for enhanced data visualization.</li>
-                        <li>Built Unlok Insight module from scratch with RESTful CRUD APIs using React & Tailwind.</li>
-                        <li>Introduced dynamic story slides for news content improving engagement.</li>
+                        <li>
+                          Revised Symbol Search user interface, boosting
+                          usability by 30%.
+                        </li>
+                        <li>
+                          Engineered interactive Quadrant UI using Recharts for
+                          enhanced data visualization.
+                        </li>
+                        <li>
+                          Built Unlok Insight module from scratch with RESTful
+                          CRUD APIs using React & Tailwind.
+                        </li>
+                        <li>
+                          Introduced dynamic story slides for news content
+                          improving engagement.
+                        </li>
                       </ul>
                     </div>
 
                     {/* Job 2 */}
                     <div className="border-l-2 border-slate-300 pl-3">
                       <div className="flex flex-wrap items-baseline justify-between gap-1">
-                        <h3 className="text-[13px] font-bold text-slate-900">Full Stack Developer</h3>
-                        <span className="text-[11px] font-mono text-slate-500">03/2025 — 01/2026</span>
+                        <h3 className="text-[13px] font-bold text-slate-900">
+                          Full Stack Developer
+                        </h3>
+                        <span className="text-[11px] font-mono text-slate-500">
+                          03/2025 — 01/2026
+                        </span>
                       </div>
-                      <div className="text-[12px] font-medium text-slate-800">Systemstar Infotech • Mumbai, India</div>
+                      <div className="text-[12px] font-medium text-slate-800">
+                        Systemstar Infotech • Mumbai, India
+                      </div>
                       <ul className="mt-1.5 space-y-1 text-[12px] text-slate-700 list-disc list-inside leading-snug">
-                        <li>Engineered vendor subdomain ordering portals and price-tier configuration systems.</li>
-                        <li>Integrated payment gateways including NMI, Authorize.net, and PayPal.</li>
-                        <li>Packaged & published Heatfleet hybrid mobile app to Apple App Store & Google Play.</li>
-                        <li>Built Flyku sports club management platform using Next.js & React Native.</li>
+                        <li>
+                          Engineered vendor subdomain ordering portals and
+                          price-tier configuration systems.
+                        </li>
+                        <li>
+                          Integrated payment gateways including NMI,
+                          Authorize.net, and PayPal.
+                        </li>
+                        <li>
+                          Packaged & published Heatfleet hybrid mobile app to
+                          Apple App Store & Google Play.
+                        </li>
+                        <li>
+                          Built Flyku sports club management platform using
+                          Next.js & React Native.
+                        </li>
                       </ul>
                     </div>
 
                     {/* Job 3 */}
                     <div className="border-l-2 border-slate-300 pl-3">
                       <div className="flex flex-wrap items-baseline justify-between gap-1">
-                        <h3 className="text-[13px] font-bold text-slate-900">Junior Software Engineer</h3>
-                        <span className="text-[11px] font-mono text-slate-500">09/2023 — 02/2025</span>
+                        <h3 className="text-[13px] font-bold text-slate-900">
+                          Junior Software Engineer
+                        </h3>
+                        <span className="text-[11px] font-mono text-slate-500">
+                          09/2023 — 02/2025
+                        </span>
                       </div>
-                      <div className="text-[12px] font-medium text-slate-800">Instient Pvt. Ltd. • India</div>
+                      <div className="text-[12px] font-medium text-slate-800">
+                        Instient Pvt. Ltd. • India
+                      </div>
                       <ul className="mt-1.5 space-y-1 text-[12px] text-slate-700 list-disc list-inside leading-snug">
-                        <li>Implemented Server-Side Rendering (SSR) to lift SEO scores from 35 to 90+.</li>
-                        <li>Conducted crawl audits with Screaming Frog and Google Search Console.</li>
-                        <li>Upgraded legacy Angular + Ionic app to Angular 17+ with Capacitor.js.</li>
+                        <li>
+                          Implemented Server-Side Rendering (SSR) to lift SEO
+                          scores from 35 to 90+.
+                        </li>
+                        <li>
+                          Conducted crawl audits with Screaming Frog and Google
+                          Search Console.
+                        </li>
+                        <li>
+                          Upgraded legacy Angular + Ionic app to Angular 17+
+                          with Capacitor.js.
+                        </li>
                       </ul>
                     </div>
                   </div>
@@ -316,21 +356,33 @@ TECHNICAL SKILLS:
                 {/* Education */}
                 <section>
                   <h2 className="text-xs uppercase font-bold tracking-wider text-slate-900 border-b border-slate-200 pb-1 mb-2.5 flex items-center gap-1.5 font-label-mono">
-                    <span className="material-symbols-outlined text-[14px] text-emerald-700">school</span>
+                    <span className="material-symbols-outlined text-[14px] text-emerald-700">
+                      school
+                    </span>
                     Education
                   </h2>
                   <div>
-                    <h3 className="text-[13px] font-bold text-slate-900">B.Sc. in Information Technology</h3>
-                    <div className="text-[12px] text-slate-700">University of Mumbai</div>
-                    <div className="text-[11px] font-mono text-slate-500">2018 – 2021 • Mumbai, India</div>
-                    <div className="text-[11px] text-emerald-700 font-medium mt-0.5">First Class Honors</div>
+                    <h3 className="text-[13px] font-bold text-slate-900">
+                      B.Sc. in Information Technology
+                    </h3>
+                    <div className="text-[12px] text-slate-700">
+                      University of Mumbai
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-500">
+                      2018 – 2021 • Mumbai, India
+                    </div>
+                    <div className="text-[11px] text-emerald-700 font-medium mt-0.5">
+                      First Class Honors
+                    </div>
                   </div>
                 </section>
 
                 {/* Technical Skills Categorized */}
                 <section>
                   <h2 className="text-xs uppercase font-bold tracking-wider text-slate-900 border-b border-slate-200 pb-1 mb-2.5 flex items-center gap-1.5 font-label-mono">
-                    <span className="material-symbols-outlined text-[14px] text-emerald-700">code</span>
+                    <span className="material-symbols-outlined text-[14px] text-emerald-700">
+                      code
+                    </span>
                     Technical Proficiencies
                   </h2>
                   <div className="space-y-2.5 text-[11.5px]">
@@ -338,37 +390,51 @@ TECHNICAL SKILLS:
                       <div className="font-bold text-slate-800 uppercase text-[10px] font-mono text-emerald-800">
                         Languages
                       </div>
-                      <div className="text-slate-700">JavaScript (ES6+), TypeScript, Python, HTML5, CSS3</div>
+                      <div className="text-slate-700">
+                        JavaScript (ES6+), TypeScript, Python, HTML5, CSS3
+                      </div>
                     </div>
                     <div>
                       <div className="font-bold text-slate-800 uppercase text-[10px] font-mono text-emerald-800">
                         Frontend
                       </div>
-                      <div className="text-slate-700">React.js, Angular 17+, Next.js (SSR), Tailwind CSS, Recharts</div>
+                      <div className="text-slate-700">
+                        React.js, Angular 17+, Next.js (SSR), Tailwind CSS,
+                        Recharts
+                      </div>
                     </div>
                     <div>
                       <div className="font-bold text-slate-800 uppercase text-[10px] font-mono text-emerald-800">
                         Backend & APIs
                       </div>
-                      <div className="text-slate-700">Node.js, Express.js, Django, RESTful CRUD APIs, JWT Auth</div>
+                      <div className="text-slate-700">
+                        Node.js, Express.js, Django, RESTful CRUD APIs, JWT Auth
+                      </div>
                     </div>
                     <div>
                       <div className="font-bold text-slate-800 uppercase text-[10px] font-mono text-emerald-800">
                         Databases & Caching
                       </div>
-                      <div className="text-slate-700">MongoDB, PostgreSQL, MySQL, Redis</div>
+                      <div className="text-slate-700">
+                        MongoDB, PostgreSQL, MySQL, Redis
+                      </div>
                     </div>
                     <div>
                       <div className="font-bold text-slate-800 uppercase text-[10px] font-mono text-emerald-800">
                         Mobile Development
                       </div>
-                      <div className="text-slate-700">React Native, Capacitor.js, iOS & Android Store Deployment</div>
+                      <div className="text-slate-700">
+                        React Native, Capacitor.js, iOS & Android Store
+                        Deployment
+                      </div>
                     </div>
                     <div>
                       <div className="font-bold text-slate-800 uppercase text-[10px] font-mono text-emerald-800">
                         Optimization & Tooling
                       </div>
-                      <div className="text-slate-700">SSR, SEO (35→90+), Screaming Frog, GSC, Docker, Git</div>
+                      <div className="text-slate-700">
+                        SSR, SEO (35→90+), Screaming Frog, GSC, Docker, Git
+                      </div>
                     </div>
                   </div>
                 </section>
@@ -387,7 +453,9 @@ TECHNICAL SKILLS:
         <div className="px-space-md py-space-sm bg-surface-container border-t border-outline-variant/30 flex items-center justify-between flex-wrap gap-2 text-outline font-label-mono text-label-mono text-xs">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
-            <span className="text-on-surface-variant">SHA-256 VERIFIED ATTESTATION</span>
+            <span className="text-on-surface-variant">
+              SHA-256 VERIFIED ATTESTATION
+            </span>
           </div>
           <div className="flex items-center gap-2">
             <button
@@ -396,16 +464,18 @@ TECHNICAL SKILLS:
               onClick={handleCopyEmail}
             >
               <span className="material-symbols-outlined text-[16px] text-primary">
-                {copiedEmail ? 'check' : 'content_copy'}
+                {copiedEmail ? "check" : "content_copy"}
               </span>
-              <span>{copiedEmail ? 'Copied Email' : 'Copy Email'}</span>
+              <span>{copiedEmail ? "Copied Email" : "Copy Email"}</span>
             </button>
             <button
               type="button"
               className="px-space-md py-1.5 rounded-lg bg-primary-container hover:bg-primary text-on-primary-container font-label-ui text-label-ui font-semibold transition-all flex items-center gap-1.5 shadow cursor-pointer"
               onClick={handleDownload}
             >
-              <span className="material-symbols-outlined text-[16px]">download</span>
+              <span className="material-symbols-outlined text-[16px]">
+                download
+              </span>
               <span>Download PDF</span>
             </button>
           </div>

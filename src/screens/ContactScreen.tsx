@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { downloadResume } from '../utils/resume.js';
 
 interface ContactScreenProps {
   onOpenResume: () => void;
@@ -24,44 +25,7 @@ export const ContactScreen: React.FC<ContactScreenProps> = ({ onOpenResume }) =>
   const handleDownload = () => {
     setIsDownloading(true);
     setTimeout(() => {
-      const resumeContent = `VAIBHAV JAGTAP - Full Stack Developer / Software Engineer
-Email: vaibhav.jagtap.dev@outlook.com | Phone: +91 9699666915 | Location: Mumbai, Maharashtra, India
-GitHub: https://github.com/VaibhavJagtap-dev | LinkedIn: https://linkedin.com/in/vaibhav-jagtap-648a02244/
-
-EXECUTIVE SUMMARY:
-Full Stack Developer with 2 years, 7 months of experience architecting scalable web and mobile applications using React, Angular, Next.js, Node.js, and Django. Proven track record boosting organic SEO scores from 35 to 90+, architecting SSR engines, and publishing production hybrid mobile apps across Apple App Store and Google Play Store.
-
-EXPERIENCE:
-1. Software Engineer / Full Stack Developer — Unlok (02/2026 - 03/2026)
-   - Revised Symbol Search UI, boosting usability by 30%.
-   - Built interactive Quadrant UI using Recharts.
-   - Built Unlok Insight module with RESTful CRUD APIs using React & Tailwind.
-
-2. Full Stack Developer — Systemstar Infotech India Pvt. Ltd. (03/2025 - 01/2026)
-   - Built vendor portal with price tiers and subdomain ordering.
-   - Integrated NMI, Authorize.net, and PayPal payment gateways.
-   - Packaged Heatfleet mobile apps for App Store & Google Play via Capacitor.
-
-3. Junior Software Engineer — Instient Pvt. Ltd. (09/2023 - 02/2025)
-   - Migrated apps to Next.js SSR, lifting SEO from 35 to 90+.
-   - Upgraded legacy Angular + Ionic to Angular 17+ with Capacitor.
-
-EDUCATION:
-B.S. in Information Technology — University of Mumbai (2018 - 2021)
-Graduated with First Class Honors.
-
-SKILLS:
-React, Angular 17+, Next.js, Node.js, Express, Django, TypeScript, JavaScript, Python, MongoDB, PostgreSQL, Redis, React Native, Capacitor, Docker, Git.
-`;
-      const blob = new Blob([resumeContent], { type: 'text/plain;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'Vaibhav_Jagtap_Resume.pdf';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      downloadResume();
       setIsDownloading(false);
     }, 400);
   };
